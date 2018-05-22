@@ -12,8 +12,8 @@ from keras.optimizers import SGD
 from keras.utils import np_utils
 from keras.callbacks import TensorBoard
 
-PROBLEM_SIZE = 3
-DATA_LENGTH = 200202 - 1
+PROBLEM_SIZE = 10
+DATA_LENGTH = 240000 - 1
 FEATURES_PATH = ("features-{}.csv".format(PROBLEM_SIZE))
 LABELS_PATH = (("labels-{}.csv".format(PROBLEM_SIZE)))
 
@@ -92,17 +92,17 @@ model.compile(loss='mse',optimizer=sgd,metrics=['accuracy'])
 # If you want to visualize the files created during training, run in your terminal
 # tensorboard --logdir path_to_current_dir/Graph 
 
-nb_epoch = 30
-model.fit(X_train, y_train, epochs=nb_epoch, validation_split=0.1, batch_size=1000, verbose=2)
+nb_epoch = 10
+model.fit(X_train, y_train, epochs=nb_epoch, validation_split=0.1, batch_size=2000, verbose=2)
 
-test1 = [0,-0.01,-1,0.48,-0.13,0,0.01,0.29,0.79,0.94]
-test_ar = np.array(test1)
-test = test_ar.reshape(1, 4*PROBLEM_SIZE - 2, 1)
-#X_train = X_train.reshape((DATA_LENGTH, 4*PROBLEM_SIZE - 2, 1))
-t = model.predict(test,1)
-ans = np.array([-0.29, 1.8, -7.37])
-print("Guess Vector:", t)
-print("Solution:", ans)
-print("Error:", abs(ans-t))
+# test1 = [0,-0.01,-1,0.48,-0.13,0,0.01,0.29,0.79,0.94]
+# test_ar = np.array(test1)
+# test = test_ar.reshape(1, 4*PROBLEM_SIZE - 2, 1)
+# #X_train = X_train.reshape((DATA_LENGTH, 4*PROBLEM_SIZE - 2, 1))
+# t = model.predict(test,1)
+# ans = np.array([-0.29, 1.8, -7.37])
+# print("Guess Vector:", t)
+# print("Solution:", ans)
+# print("Error:", abs(ans-t))
 
 model.save("{}model_{}examples.h5".format(PROBLEM_SIZE, DATA_LENGTH + 1))

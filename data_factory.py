@@ -4,7 +4,7 @@ import csv
 from scipy.linalg import solve_banded, solve
 
 DATA_LENGTH = 10000
-PROBLEM_SIZE = 3
+PROBLEM_SIZE = 10
 FEATURES_PATH = ("features-{}.csv".format(PROBLEM_SIZE))
 LABELS_PATH = (("labels-{}.csv".format(PROBLEM_SIZE)))
 
@@ -109,13 +109,14 @@ def write_csv(filename, array, overwrite):
 
 if __name__ == "__main__":
 	for i in range(0, DATA_LENGTH):
-		matrix = create_three_band_matrix(PROBLEM_SIZE, 0, 750, np.random.uniform(1.5, 100))
+		matrix = create_three_band_matrix(PROBLEM_SIZE, 0, 200, np.random.uniform(75, 100))
 		matrix = normalize(matrix)
-		matrix = discretize(matrix)
+		#matrix = discretize(matrix)
 		vector = create_vector(PROBLEM_SIZE)
-		vector = discretize(vector)
+		#vector = discretize(vector)
 		data_in = np.append(get_diagonals(matrix), vector)
-		data_out = discretize(solve(matrix, vector))
+		data_out = solve(matrix, vector)
+		#data_out = discretize(solve(matrix, vector))
 		#write_csv(FEATURES_PATH, data_in, True)
 		#write_csv(LABELS_PATH, data_out, True)
 		write_csv(FEATURES_PATH, data_in, False)
@@ -125,17 +126,17 @@ if __name__ == "__main__":
 #array2 = np.loadtxt(open(LABELS_PATH, "rb"), delimiter=",", skiprows=1)
 #array1 = np.ndarray.flatten(array1)
 #array2 = np.ndarray.flatten(array2)
-df_features = pd.read_csv(FEATURES_PATH)
-df_labels = pd.read_csv(LABELS_PATH)
-labels_array = df_labels.iloc[0].values
-features_array = df_features.iloc[0].values
-print(labels_array)
-print(features_array)
-arr1 = get_diag_matrix(features_array)
-vec1 = get_vector(features_array)
-print(arr1)
-print(arr1.dot(labels_array))
-print(vec1)
+# df_features = pd.read_csv(FEATURES_PATH)
+# df_labels = pd.read_csv(LABELS_PATH)
+# labels_array = df_labels.iloc[0].values
+# features_array = df_features.iloc[0].values
+# print(labels_array)
+# print(features_array)
+# arr1 = get_diag_matrix(features_array)
+# vec1 = get_vector(features_array)
+# print(arr1)
+# print(arr1.dot(labels_array))
+# print(vec1)
 #print(arr1)
 #print(vec1)
 
