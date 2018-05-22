@@ -4,4 +4,4 @@ A neural network implementation that predicts what the solution to a sparse matr
 
 ## Dependencies:
 
-Python 3.6, keras, tensorflow and various standard python libraries (numpy, scipy, pandas, etc.)
+Python 3.6, keras, tensorflow and various standard python libraries (numpy, scipy, pandas, csv, etc.)
