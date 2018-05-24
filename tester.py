@@ -2,6 +2,7 @@
 
 # import the necessary packages
 import numpy as np
+from numpy import array, zeros, diag, diagflat, dot
 import pandas as pd
 from keras.models import Sequential, load_model
 from scipy.linalg import solve
@@ -62,7 +63,7 @@ def create_three_band_matrix(size, mean, std, factor):
 			matrix[i][i] *= np.random.choice([-1,1])
 	return matrix
 
-def gaussSeidel(A, b, initX = -1, maxIter = 1000):
+def gaussSeidel(A, b, initX, maxIter, tolerance):
 	# A is n-by-n np array
 	# b is 1-dim np array with size n
 	# initX is 1-dim np array with size n (initial guess)
@@ -80,10 +81,25 @@ def gaussSeidel(A, b, initX = -1, maxIter = 1000):
 	for ii in range(maxIter):
 		error = np.linalg.norm(A.dot(x) - b)
 		x = np.linalg.inv(D+L).dot(-U.dot(x) + b) 
-		if np.linalg.norm(A.dot(x) - b) == error: # converged
+		new_error = np.linalg.norm(A.dot(x) - b)
+		if abs(new_error - error).mean() <= tolerance: # converged
 			print ("iteration:", ii)
 			break
 	return x
+
+def jacobi(A, b, x, N, tolerance):
+	D = diag(A)
+	R = A - diagflat(D)
+	for i in range(N):
+		error = np.linalg.norm(A.dot(x) - b)
+		x = (b - dot(R,x))/D
+		new_error = np.linalg.norm(A.dot(x) - b)
+		if abs(new_error - error).mean() <= tolerance: # converged
+			print ("iteration:", i)
+			break
+	return x
+
+
 #matrix = 150*np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
 #vector = 150*np.array([1, 1, 1])
 
@@ -93,8 +109,8 @@ def gaussSeidel(A, b, initX = -1, maxIter = 1000):
 # matrix = np.array([[54, 49, 0], [-39, -109, 64], [0, 99, 118]])
 # vector = np.array([124, 0.7, -18])
 
-matrix = create_three_band_matrix(10, 23, 44, 1.3)
-vector = np.random.rand(PROBLEM_SIZE, 1)
+matrix = 1/4*create_three_band_matrix(PROBLEM_SIZE, 1, 1, 1.3)
+vector = 25*np.random.rand(PROBLEM_SIZE, 1)
 
 solution = solve(matrix, vector)
 
@@ -111,16 +127,23 @@ model_guess = model.predict(test, 1)
 model_guess /= matrix_max
 model_guess *= vector_max
 
-print("Exact Solution:", solution.T)
 print("Guess Vector:", model_guess)
-#print("Error Squared:", (solution - model_guess)**2)
+print("Exact Solution:", solution.T)
+#print("Error Squared:", (solution.T - model_guess)**2)
 
 #prediction = np.array(model_guess)
 #prediction = prediction.reshape(3,1)
 
-# print("Solving using Gauss Seidel...")
-# init_guess = np.ones(PROBLEM_SIZE)
+print("Solving using Gauss Seidel...")
+init_guess = np.zeros(PROBLEM_SIZE)
+print("With initial guess = 0")
+print(gaussSeidel(matrix, vector, init_guess, 1000, 10e-6)[:,0])
+print("With initial guess equal to model prediction")
+print(gaussSeidel(matrix, vector, model_guess.T, 1000, 10e-6).T)
+
+# print("Solving using Jacobi...")
+# init_guess = np.zeros(PROBLEM_SIZE)
 # print("With initial guess = 0")
-# print(gaussSeidel(matrix, vector.T, init_guess, 3))
+# print(jacobi(matrix, vector, init_guess, 300000, 10e-7)[:,0])
 # print("With initial guess equal to model prediction")
-# print(gaussSeidel(matrix, vector.T, np.array([3.1824453,-0.69764,0.40926597]), 3))
+# print(jacobi(matrix, vector, model_guess.T, 300000, 10e-7)[:,0])
