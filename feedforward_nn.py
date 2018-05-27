@@ -11,6 +11,10 @@ from keras.layers import Dense, Activation, Flatten, Convolution1D, Dropout, Max
 from keras.optimizers import SGD
 from keras.utils import np_utils
 from keras.callbacks import TensorBoard
+import os
+import tensorflow as tf
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # supress memory warnings
 
 PROBLEM_SIZE = 100
 DATA_LENGTH = 250000 - 1
@@ -85,16 +89,6 @@ model.add(Dense(PROBLEM_SIZE, activation='linear'))
 sgd = SGD(lr=0.01, nesterov=True, decay=1e-6, momentum=0.9)
 model.compile(loss='mse',optimizer=sgd,metrics=['accuracy'])
 
-# Use tensorboard
-# tensorboard = TensorBoard(log_dir="logs/{}".format(time()))
-# tensorboard = keras.callbacks.TensorBoard(log_dir='./Graph', histogram_freq=0, write_graph=True, write_images=True)
-# model.fit(...inputs and parameters..., callbacks=[tbCallBack])
-# If you want to visualize the files created during training, run in your terminal
-# tensorboard --logdir path_to_current_dir/Graph 
-
-nb_epoch = 1
-model.fit(X_train, y_train, epochs=nb_epoch, validation_split=0.1, batch_size=1000, verbose=2)
-
 # test1 = [0,-0.01,-1,0.48,-0.13,0,0.01,0.29,0.79,0.94]
 # test_ar = np.array(test1)
 # test = test_ar.reshape(1, 4*PROBLEM_SIZE - 2, 1)
@@ -105,4 +99,10 @@ model.fit(X_train, y_train, epochs=nb_epoch, validation_split=0.1, batch_size=10
 # print("Solution:", ans)
 # print("Error:", abs(ans-t))
 
+tensorboard = TensorBoard(log_dir='./logs', histogram_freq=0, write_graph=True)
+# to actiavte type in cmd: tensorboard --logdir=path/to/log-directory
+# default: tensorboard --logdir=./logs
+
+nb_epoch = 2
+model.fit(X_train, y_train, epochs=nb_epoch, validation_split=0.1, batch_size=1000, verbose=2, callbacks=[tensorboard])
 model.save("{}model_{}examples.h5".format(PROBLEM_SIZE, DATA_LENGTH + 1))
