@@ -12,8 +12,8 @@ from keras.optimizers import SGD
 from keras.utils import np_utils
 from keras.callbacks import TensorBoard
 
-PROBLEM_SIZE = 10
-DATA_LENGTH = 240000 - 1
+PROBLEM_SIZE = 100
+DATA_LENGTH = 250000 - 1
 FEATURES_PATH = ("features-{}.csv".format(PROBLEM_SIZE))
 LABELS_PATH = (("labels-{}.csv".format(PROBLEM_SIZE)))
 
@@ -66,11 +66,11 @@ model.add(Convolution1D(filters=256, kernel_size=1, padding='SAME', activation='
 #model.add(MaxPooling1D())
 model.add(Flatten())
 model.add(Dropout(0.2))
-model.add(Dense(1024, activation='relu'))
+model.add(Dense(2048, activation='relu'))
 model.add(Dense(2048, activation='relu'))
 model.add(Dropout(0.2))
-model.add(Dense(1024, activation='relu'))
-model.add(Dense(1024, activation='relu'))
+model.add(Dense(2048, activation='relu'))
+model.add(Dense(2048, activation='relu'))
 model.add(Dropout(0.1))
 model.add(Dense(PROBLEM_SIZE, activation='linear'))
 # Check what happens if the linear activation layer is removed
@@ -92,8 +92,8 @@ model.compile(loss='mse',optimizer=sgd,metrics=['accuracy'])
 # If you want to visualize the files created during training, run in your terminal
 # tensorboard --logdir path_to_current_dir/Graph 
 
-nb_epoch = 10
-model.fit(X_train, y_train, epochs=nb_epoch, validation_split=0.1, batch_size=2000, verbose=2)
+nb_epoch = 1
+model.fit(X_train, y_train, epochs=nb_epoch, validation_split=0.1, batch_size=1000, verbose=2)
 
 # test1 = [0,-0.01,-1,0.48,-0.13,0,0.01,0.29,0.79,0.94]
 # test_ar = np.array(test1)

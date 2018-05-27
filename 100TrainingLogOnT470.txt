@@ -1,0 +1,5 @@
+ - 5500s - loss: 2.13 
+ - 5143s - loss: 1.8905 - acc: 0.0111 - val_loss: 0.1712 - val_acc: 0.0154
+ - 5489s - loss: 1.5430 - acc: 0.0062 - val_loss: 0.2278 - val_acc: 0.0208
+ - 5596s - loss: 1.4764 - acc: 0.0053 - val_loss: 0.2504 - val_acc: 0.0220
+ - 7316s - loss: 1.4631 - acc: 0.0052 - val_loss: 0.2534 - val_acc: 0.0224

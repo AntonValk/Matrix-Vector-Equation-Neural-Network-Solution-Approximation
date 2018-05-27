@@ -6,9 +6,12 @@ from numpy import array, zeros, diag, diagflat, dot
 import pandas as pd
 from keras.models import Sequential, load_model
 from scipy.linalg import solve
+import os
+import tensorflow as tf
 
-PROBLEM_SIZE = 10
-DATA_LENGTH = 240000
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+PROBLEM_SIZE = 100
+DATA_LENGTH = 250000
 
 def get_diag_matrix(x):
 	size = (int) ((len(x) + 2) / 4)
