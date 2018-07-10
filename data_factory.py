@@ -4,7 +4,7 @@ import csv
 from scipy.linalg import solve_banded, solve
 
 DATA_LENGTH = 10000
-PROBLEM_SIZE = 100
+PROBLEM_SIZE = 1000
 FEATURES_PATH = ("features-{}.csv".format(PROBLEM_SIZE))
 LABELS_PATH = (("labels-{}.csv".format(PROBLEM_SIZE)))
 
@@ -109,7 +109,7 @@ def write_csv(filename, array, overwrite):
 
 if __name__ == "__main__":
 	for i in range(0, DATA_LENGTH):
-		matrix = create_three_band_matrix(PROBLEM_SIZE, 0, 100, np.random.uniform(2000, 2500))
+		matrix = create_three_band_matrix(PROBLEM_SIZE, 0, 100, np.random.uniform(20, 500))
 		matrix = normalize(matrix)
 		#matrix = discretize(matrix)
 		vector = create_vector(PROBLEM_SIZE)
